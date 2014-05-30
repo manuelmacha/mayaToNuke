@@ -5,35 +5,33 @@ try:
     from PyQt4 import QtGui, QtCore
 except ImportError:
     from PySide import QtGui, QtCore
-    
 from mayaToNuke.utils import appContext, settings
 from mayaToNuke import constants
 
-class ExportsTableWidget(QtGui.QTableWidget):
+class ExportsTableWidget(QtGui.QTableWidget): # 1.)
     def __init__(self, parent = None):
         super(ExportsTableWidget, self).__init__(parent)
-        
-        self.settings = settings.Settings()
-        self.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        self.settings = settings.Settings() # 2.)
+        self.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers) # 3.)
         self.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
         self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self.reloadList()
+        self.reloadList() # 4.)
         
     def reloadList(self):
-        self.clear()
+        self.clear() # 5.)
         labels = [x.capitalize() for x in constants.EXPORT_KEYS]
-        self.setColumnCount(len(labels))
+        self.setColumnCount(len(labels)) # 6.)
         self.setHorizontalHeaderLabels(labels)
-        exports = self.settings.exports()
+        exports = self.settings.exports() # 7.)
         exports.reverse()
         self.setRowCount(len(exports))
-        for i in range(len(exports)):
-            for k in range(len(constants.EXPORT_KEYS)):
+        for i in range(len(exports)): # 8.)
+            for k in range(len(constants.EXPORT_KEYS)): # 9.)
                 value = exports[i][constants.EXPORT_KEYS[k]]
                 item = QtGui.QTableWidgetItem(str(value))
-                item.setData(QtCore.Qt.UserRole, exports[i])
+                item.setData(QtCore.Qt.UserRole, exports[i]) # 10.)
                 self.setItem(i, k, item)
-        self.resizeColumnsToContents()
+        self.resizeColumnsToContents() # 11.)
         self.resizeRowsToContents()
 
 class BaseUi(QtGui.QMainWindow):
@@ -75,7 +73,9 @@ class BaseUi(QtGui.QMainWindow):
         self.__updateWindowTitle()
         
     def __updateWindowTitle(self):
-        title = '%s - %s - %s' % (constants.TOOLNAME, self.appContext.toString(), self.settings.basePath())
+        title = '%s - %s - %s' % (constants.TOOLNAME
+                                  , self.appContext.toString()
+                                  , self.settings.basePath())
         self.setWindowTitle(title)
         
     def __clearExports(self):
@@ -93,7 +93,8 @@ class BaseUi(QtGui.QMainWindow):
         QtGui.QDesktopServices.openUrl(QtCore.QUrl(constants.HELP_URL))
         
     def __setBasePath(self):
-        dialog = QtGui.QFileDialog(self, 'Set Path to Exports-Dir', self.settings.basePath())
+        dialog = QtGui.QFileDialog(self, 'Set Path to Exports-Dir'
+                                   , self.settings.basePath())
         dialog.setFileMode(QtGui.QFileDialog.Directory)
         dialog.setOption(QtGui.QFileDialog.ShowDirsOnly)
         if dialog.exec_():
@@ -108,16 +109,6 @@ class BaseUi(QtGui.QMainWindow):
     
     def readSettings(self):
         geometry = self.settings.getUiAttr('geometry')
-        if geometry:
-            self.restoreGeometry(geometry)
+        if geometry: self.restoreGeometry(geometry)
         state = self.settings.getUiAttr('state')
-        if state:   
-            self.restoreState(state)
-        
-if __name__ == '__main__':
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    ui = BaseUi()
-    ui.show()
-    ui.raise_()
-    sys.exit(app.exec_())
+        if state: self.restoreState(state)
