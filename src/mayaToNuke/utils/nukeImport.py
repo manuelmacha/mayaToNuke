@@ -2,7 +2,6 @@ import nuke
 from mayaToNuke.constants import TOOLNAME
 
 def importFromFile(name, fullpath, type_):
-    
     if type_ == 'mesh':
         node = nuke.nodes.ReadGeo2(file = fullpath)
     elif type_ == 'locator':
@@ -19,10 +18,13 @@ def importFromFile(name, fullpath, type_):
     if len(sel):
         if sel[0].Class() == 'Scene':
             scene = sel[0]
+        else:
+            scene = nuke.toNode(TOOLNAME)
     else:
         scene = nuke.toNode(TOOLNAME)
     if not scene:
-        scene = nuke.nodes.Scene(name = TOOLNAME)    
+        scene = nuke.nodes.Scene()
+        scene.setName(TOOLNAME)  
     
     numInputs = scene.inputs()
     scene.setInput(numInputs, node)
