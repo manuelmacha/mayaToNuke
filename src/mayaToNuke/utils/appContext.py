@@ -2,9 +2,7 @@ import sys
 
 class AppContext(object):
     _instance = None
-    
     def __init__(self):
-        
         self.__insideMaya  = 'maya.app.startup.basic' in sys.modules
         self.__insideNuke = 'nuke' in sys.modules
         self.__standalone = not (self.__insideMaya or self.__insideNuke)
@@ -27,8 +25,3 @@ class AppContext(object):
         if self.isMaya(): return 'Maya'
         elif self.isNuke(): return 'Nuke'
         return 'Standalone'
-    
-if __name__ == '__main__':
-    print 'Is Maya:', AppContext().isMaya()
-    print 'Is Nuke:', AppContext().isNuke() 
-    print 'Is Standalone:', AppContext().isStandalone()
