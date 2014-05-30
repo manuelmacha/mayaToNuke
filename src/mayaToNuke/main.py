@@ -19,23 +19,32 @@ UI = None
 
 def getUi():
     global UI
+    appCtx = AppContext()
     if not UI:
-        if AppContext().isMaya():
+        if appCtx.isMaya():
             from mayaToNuke.ui import mayaUi
             UI = mayaUi.MayaUi()            
-        elif AppContext().isNuke():
+        elif appCtx.isNuke():
             from mayaToNuke.ui import nukeUi
             UI = nukeUi.NukeUi()
-        elif AppContext().isStandalone():
+        elif appCtx.isStandalone():
             from mayaToNuke.ui import baseUi
             UI = baseUi.BaseUi()
-    logger.info('Starting %s in %s mode' % (TOOLNAME, AppContext().toString()))            
+    logger.info('Starting %s in %s mode' % (TOOLNAME, appCtx.toString()))            
     return UI
 
 def showUi():
     ui = getUi()
     ui.show()
     ui.raise_()
+    
+def deleteUi():
+    global UI
+    if UI:
+        UI.close()
+        UI.setParent(None)
+        UI = None
+        
         
 if __name__ == '__main__':
     import sys

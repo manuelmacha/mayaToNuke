@@ -23,7 +23,7 @@ m2n.showUi()
 '''
 # Nuke cmd:
 import sys
-p = '/Users/manuel/Dropbox/Private/Eclipse/workspace/mayaToNuke/src'
+p = '/Users/manuel/Dropbox/Private/Eclipse/workspace/git/mayaToNuke/src'
 if not p in sys.path:
     sys.path.append(p)
 
