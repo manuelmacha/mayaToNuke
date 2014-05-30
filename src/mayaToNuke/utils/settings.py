@@ -13,37 +13,33 @@ import os
 class Settings(QtCore.QSettings):
     def __init__(self):
         super(Settings, self).__init__(constants.TOOLNAME)
-        
-        self.appCtxStr = appContext.AppContext().toString()
-        if not self.basePath():
+        self.appCtxStr = appContext.AppContext().toString() # 1.)
+        if not self.basePath(): # 2.)
             homeDir = QtCore.QDir().homePath()
             self.setBasePath(homeDir)
+                
+    def setBasePath(self, basePath): # 3.)
+        path = QtCore.QDir(basePath)
+        if not path.dirName() == constants.TOOLNAME: # 4.)
+            path.mkdir(constants.TOOLNAME)
+            basePath = os.path.join(basePath, constants.TOOLNAME)
+        self.setValue('basePath', basePath) # 5.)
         
-    def setUiAttr(self, key, value):
+    def basePath(self): # 6.)
+        return self.value('basePath')        
+        
+    def setUiAttr(self, key, value): # 7.)
         self.beginGroup(self.appCtxStr)
         self.setValue(key, value)
         self.endGroup()
         
-    def getUiAttr(self, key):
+    def getUiAttr(self, key): # 8.)
         self.beginGroup(self.appCtxStr)
         value = self.value(key)
         self.endGroup()
-        return value   
-        
-    def basePath(self):
-        return self.value('basePath')
+        return value       
     
-    def setBasePath(self, basePath):
-        path = QtCore.QDir(basePath)
-        if not path.dirName() == constants.TOOLNAME:
-            path.mkdir(constants.TOOLNAME)
-            basePath = os.path.join(basePath, constants.TOOLNAME)
-        self.setValue('basePath', basePath)
-        print basePath
-        
-    def clearBasePath(self):
-        self.remove('basePath')
-        
+    # 9.)
     def addExport(self, name, type_, date, time, path, filename):
         numExports = self.beginReadArray('exports')
         self.endArray()
@@ -57,7 +53,8 @@ class Settings(QtCore.QSettings):
         self.setValue('filename', filename)
         self.endArray()
         return self.basePath(), filename
-        
+    
+    # 10.)
     def exports(self):
         exports = []
         numExports = self.beginReadArray('exports')
@@ -69,19 +66,3 @@ class Settings(QtCore.QSettings):
             exports.append(export)
         self.endArray()
         return exports
-    
-    def clearExports(self):
-        self.remove('exports')
-
-if __name__ == '__main__':
-    s = Settings()
-    #s.setBasePath('/Users/manuel/Desktop/abc')
-    s.clearBasePath()
-    #print s.basePath()
-    #s.clearExports()
-    #s.addExport('myObject', 'geo', 4, 5, 'dasd', 'asd')    
-    #print s.exports()
-    
-
-
-    
