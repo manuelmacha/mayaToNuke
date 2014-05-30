@@ -61,7 +61,4 @@ class MayaUi(baseUi.BaseUi):
             shapes = cmds.listRelatives(cmds.ls(sl = True)[0])
             type_ = cmds.nodeType(shapes[0])
             self.settings.addExport(name, type_, date, time, basePath, filename)
-            self.exportTableWidget.reloadList()
-        
-        
-        
+            self.exportTableWidget.reloadList()      
