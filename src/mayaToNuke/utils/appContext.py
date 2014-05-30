@@ -1,5 +1,4 @@
 import sys
-
 class AppContext(object):
     _instance = None # 1.)
     def __init__(self): # 3.)
