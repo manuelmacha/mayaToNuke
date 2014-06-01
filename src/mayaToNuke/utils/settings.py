@@ -28,12 +28,12 @@ class Settings(QtCore.QSettings):
     def basePath(self): # 6.)
         return self.value('basePath')        
         
-    def setUiAttr(self, key, value): # 7.)
+    def setAppCtxAttr(self, key, value): # 7.)
         self.beginGroup(self.appCtxStr)
         self.setValue(key, value)
         self.endGroup()
         
-    def getUiAttr(self, key): # 8.)
+    def getAppCtxAttr(self, key): # 8.)
         self.beginGroup(self.appCtxStr)
         value = self.value(key)
         self.endGroup()

@@ -103,12 +103,12 @@ class BaseUi(QtGui.QMainWindow):
             self.__updateWindowTitle()
          
     def closeEvent(self, event):
-        self.settings.setUiAttr('geometry', self.saveGeometry())
-        self.settings.setUiAttr('state', self.saveState())
+        self.settings.setAppCtxAttr('geometry', self.saveGeometry())
+        self.settings.setAppCtxAttr('state', self.saveState())
         return QtGui.QMainWindow.closeEvent(self, event)
     
     def readSettings(self):
-        geometry = self.settings.getUiAttr('geometry')
+        geometry = self.settings.getAppCtxAttr('geometry')
         if geometry: self.restoreGeometry(geometry)
-        state = self.settings.getUiAttr('state')
+        state = self.settings.getAppCtxAttr('state')
         if state: self.restoreState(state)

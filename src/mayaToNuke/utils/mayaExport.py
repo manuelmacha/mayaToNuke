@@ -7,6 +7,6 @@ def alembicExport(start, end, path, filename):
     sel = cmds.ls(sl = True)
     if not len(sel) == 1: 
         return
-    cmd = 'AbcExport -j "-frameRange %d %d -root %s -file %s"' % (start, end, sel[0], fullpath)
+    cmd = 'AbcExport -j "-frameRange %d %d -root %s -uv -file %s"' % (start, end, sel[0], fullpath)
     mel.eval(cmd)
     return os.path.isfile(fullpath)
