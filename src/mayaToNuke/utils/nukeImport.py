@@ -1,19 +1,19 @@
-import nuke
-from mayaToNuke.constants import TOOLNAME
+import nuke 
+from mayaToNuke.constants import TOOLNAME 
 
-def importFromFile(name, fullpath, type_):
-    if type_ == 'mesh':
+def importFromFile(name, fullpath, type_): # 1.) 
+    if type_ == 'mesh': # 2.) 
         node = nuke.nodes.ReadGeo2(file = fullpath)
-    elif type_ == 'locator':
+    elif type_ == 'locator': # 3.)
         node = nuke.nodes.Axis2(read_from_file = True, file = fullpath)
-    elif type_ == 'camera':
+    elif type_ == 'camera': # 4.)
         node = nuke.nodes.Camera2(read_from_file = True, file = fullpath)
-    else:
+    else: # 5.)
         nuke.message('Import for type %s not yet supported' % type_)
         return
-    node.setName(name)
+    node.setName(name) # 6.)
     
-    scene = None
+    scene = None # 7.)
     sel = nuke.selectedNodes()
     if len(sel):
         if sel[0].Class() == 'Scene':
@@ -26,6 +26,6 @@ def importFromFile(name, fullpath, type_):
         scene = nuke.nodes.Scene()
         scene.setName(TOOLNAME)  
     
-    numInputs = scene.inputs()
+    numInputs = scene.inputs()  # 8.)
     scene.setInput(numInputs, node)
     return node

@@ -19,8 +19,8 @@ class ExportsTableWidget(QtGui.QTableWidget): # 1.)
         
     def reloadList(self):
         self.clear() # 5.)
-        labels = [x.capitalize() for x in constants.EXPORT_KEYS]
-        self.setColumnCount(len(labels)) # 6.)
+        labels = [x.capitalize() for x in constants.EXPORT_KEYS] # 6.)
+        self.setColumnCount(len(labels))
         self.setHorizontalHeaderLabels(labels)
         exports = self.settings.exports() # 7.)
         exports.reverse()
@@ -30,24 +30,25 @@ class ExportsTableWidget(QtGui.QTableWidget): # 1.)
                 value = exports[i][constants.EXPORT_KEYS[k]]
                 item = QtGui.QTableWidgetItem(str(value))
                 item.setData(QtCore.Qt.UserRole, exports[i]) # 10.)
-                self.setItem(i, k, item)
-        self.resizeColumnsToContents() # 11.)
+                self.setItem(i, k, item) # 11.)
+        self.resizeColumnsToContents() # 12.)
         self.resizeRowsToContents()
 
-class BaseUi(QtGui.QMainWindow):
+class BaseUi(QtGui.QMainWindow): # 13.)
     def __init__(self, parent = None):
         super(BaseUi, self).__init__(parent)
         
-        self.appContext = appContext.AppContext()
-        self.settings = settings.Settings()
-        self.readSettings()
+        self.appContext = appContext.AppContext() # 14.)
+        self.settings = settings.Settings() 
+        self.readSettings() # 15.)
         
-        self.exportTableWidget = ExportsTableWidget(self)
+        self.exportTableWidget = ExportsTableWidget(self) # 16.)
         self.setCentralWidget(self.exportTableWidget)
         
-        self.mainToolbar = QtGui.QToolBar(self)
+        self.mainToolbar = QtGui.QToolBar(self) # 17.)
         self.addToolBar(self.mainToolbar)
 
+        # 18.)
         reloadIcon = QtGui.QApplication.style().standardIcon(QtGui.QStyle.SP_BrowserReload)
         reloadAction = QtGui.QAction(reloadIcon, 'Reload Exports List', self.mainToolbar)
         reloadAction.triggered.connect(self.exportTableWidget.reloadList)
@@ -70,7 +71,7 @@ class BaseUi(QtGui.QMainWindow):
         helpAction.triggered.connect(self.__openOnlineHelp)
         self.mainToolbar.addAction(helpAction)
         
-        self.__updateWindowTitle()
+        self.__updateWindowTitle() # 19.)
         
     def __updateWindowTitle(self):
         title = '%s - %s - %s' % (constants.TOOLNAME
@@ -78,7 +79,7 @@ class BaseUi(QtGui.QMainWindow):
                                   , self.settings.basePath())
         self.setWindowTitle(title)
         
-    def __clearExports(self):
+    def __clearExports(self): # 20.)
         msgBox = QtGui.QMessageBox()
         msgBox.setText('This action is irreversible');
         msgBox.setInformativeText('Do you want to proceed?')
@@ -88,11 +89,11 @@ class BaseUi(QtGui.QMainWindow):
         if result == msgBox.Ok:
             self.settings.clearExports()
             self.exportTableWidget.reloadList()
-            
-    def __openOnlineHelp(self):
+       
+    def __openOnlineHelp(self): # 21.)
         QtGui.QDesktopServices.openUrl(QtCore.QUrl(constants.HELP_URL))
         
-    def __setBasePath(self):
+    def __setBasePath(self): # 22.)
         dialog = QtGui.QFileDialog(self, 'Set Path to Exports-Dir'
                                    , self.settings.basePath())
         dialog.setFileMode(QtGui.QFileDialog.Directory)
@@ -102,13 +103,13 @@ class BaseUi(QtGui.QMainWindow):
             self.settings.setBasePath(newPath)
             self.__updateWindowTitle()
          
-    def closeEvent(self, event):
+    def closeEvent(self, event): # 23.)
         self.settings.setAppCtxAttr('geometry', self.saveGeometry())
         self.settings.setAppCtxAttr('state', self.saveState())
         return QtGui.QMainWindow.closeEvent(self, event)
-    
-    def readSettings(self):
+
+    def readSettings(self): # 24.)
         geometry = self.settings.getAppCtxAttr('geometry')
         if geometry: self.restoreGeometry(geometry)
         state = self.settings.getAppCtxAttr('state')
-        if state: self.restoreState(state)
+        if state: self.restoreState(state)   

@@ -14,6 +14,7 @@ class NukeUi(baseUi.BaseUi):
     def __init__(self, parent = None):
         super(NukeUi, self).__init__(parent)
         
+        # 1.)
         beforeAction = self.mainToolbar.actions()[0]
         importIcon = QtGui.QApplication.style().standardIcon(QtGui.QStyle.SP_DialogOpenButton)
         importAction = QtGui.QAction(importIcon, 'Import Selected', self.mainToolbar)
@@ -21,11 +22,11 @@ class NukeUi(baseUi.BaseUi):
         self.mainToolbar.insertAction(beforeAction, importAction)
         
     def __import(self):
-        item = self.exportTableWidget.currentItem()
+        item = self.exportTableWidget.currentItem() # 2.)
         if item:
             exportData = item.data(QtCore.Qt.UserRole)
-            fullpath = os.path.join(exportData['path'], exportData['filename']) 
-            if not os.path.isfile(fullpath):
+            fullpath = os.path.join(exportData['path'], exportData['filename']) # 3.)
+            if not os.path.isfile(fullpath): # 4.)
                 msgBox = QtGui.QMessageBox()
                 msgBox.setText('Cannot locate file:');
                 msgBox.setInformativeText(fullpath)
@@ -35,7 +36,5 @@ class NukeUi(baseUi.BaseUi):
                 return
             name = exportData['name']
             type_ = exportData['type']
-            result = nukeImport.importFromFile(name, fullpath, type_)
-                
-            
+            result = nukeImport.importFromFile(name, fullpath, type_) # 5.)          
         

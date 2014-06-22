@@ -5,6 +5,7 @@ try:
     from PyQt4 import QtGui, QtCore
 except ImportError:
     from PySide import QtGui, QtCore
+
 from mayaToNuke.utils.appContext import AppContext
 from mayaToNuke.constants import TOOLNAME
     
@@ -22,16 +23,14 @@ def getUi():
         elif appCtx.isStandalone():
             from mayaToNuke.ui import baseUi
             UI = baseUi.BaseUi()          
-    return UI # 5.)
+    return UI
 
-def showUi(): # 6.)
+def showUi(): # 5.)
     ui = getUi()
     ui.show()
-#    ui.raise_()
-#    
-#def deleteUi():
-#    global UI
-#    if UI:
-#        UI.close()
-#        UI.setParent(None)
-#        UI = None  
+    
+if __name__ == '__main__':
+    import sys
+    app = QtGui.QApplication(sys.argv)
+    showUi()
+    sys.exit(app.exec_())
